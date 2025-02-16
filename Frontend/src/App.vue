@@ -12,7 +12,7 @@
           </div>
           <!-- C: Signal Selection -->
           <div class="h-1/4 w-full bg-white p-4 mb-2 rounded-lg shadow-custom shadow-exposed-bottom">
-            <SignalSelection class="h-full w-full" />
+            <SignalView class="h-full w-full" />
           </div>
         </el-col>
         <el-col :span="16" class="h-full pl-2">
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import CircomCode from './components/CircomCode.vue';
 import CircuitView from './components/CircuitView.vue';
-import SignalSelection from './components/SignalSelection.vue';
+import SignalView from './components/SignalView.vue';
 import RestrictionView from './components/RestrictionView.vue';
 </script>
 

@@ -15,17 +15,22 @@ server.post('/generateCircuit', async (request, reply) => {
     const fileName: string = `${timestamp}.circom`;
 
     try {
+
+        // save Frontend code to a folder under /compilations, the folder is named with timestamp
+        // compile circom code in the folder. The process will interrupt if the code cannot compile, 
         await saveCode(timestamp, fileName, code).then((result) => {
             let replyData = {
                 "compilationId": timestamp,
                 "circuitData": result,
             }
-            
+            console.log(`project ${timestamp} compile successed`);
             reply.send(JSON.stringify(replyData));
         })
     } catch (error) {
-        const err = error as Error;
+        const err = error as Error;        
         reply.status(400).send({ error: 'Failed to parse Circom code', details: err.message });
+        console.log(`project ${timestamp} compile failed.\n`);
+        console.log(`The error message is: ${error}`)
     }
 });
 

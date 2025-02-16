@@ -1,19 +1,11 @@
-export function buildDAG(constraints: any[]){
-    const dag: any[] = [];
+interface DAGData {
+    symbols: Record<string, any>;
+    constraints: Record<string, any>;
+    substitutions: Record<string, any>;
+}
+
+export function buildDAG(constraints: DAGData): DAGData{
+    
 
     return constraints;
 }
-// example DAG data format
-// const dagData = {
-//     nodes: [
-//       { id: 'A' },
-//       { id: 'B' },
-//       { id: 'C' },
-//       { id: 'D' },
-//     ],
-//     links: [
-//       { source: 'A', target: 'B' },
-//       { source: 'B', target: 'C' },
-//       { source: 'A', target: 'D' },
-//     ],
-//   };

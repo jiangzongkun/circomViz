@@ -86,7 +86,7 @@ watch(() => circuitStore.code, (newValue) => {
 });
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 .editor-container {
   height: 100%;
   width: 100%;

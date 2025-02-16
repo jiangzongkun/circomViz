@@ -1,4 +1,8 @@
 <template>
+  <div class="fixed top-4 left-4 right-4" style="max-width: 400px">
+    <el-alert v-if="isCompilationFail" :title="compilationFailMessage" type="error" show-icon
+      @close="isCompilationFail = false" />
+  </div>
   <div class="flex flex-col flex-nowrap h-full w-full">
     <div class="flex flex-row flex-nowrap justify-between">
       <div class="text-base font-bold mb-2">Code Input</div>
@@ -7,10 +11,10 @@
         <el-button type="warning" plain :disabled="codeEmpty" @click="cleanCode">Clean</el-button>
       </div>
     </div>
-    <div class="grow border">
-      <MonacoEditor v-model="circuitStore.code" class="w-full h-full" />
+    <div class="flex-grow border">
+      <MonacoEditor v-model="circuitStore.code" @validation="handleEditorValidation" style="min-height: 300px; height: 99%;"/>
     </div>
-    <div>
+    <div class="">
       <el-button @click="generateCircuit" type="primary" class="mt-2">Generate Circuit</el-button>
       <el-alert v-if="error" type="error" class="mt-4">{{ error }}</el-alert>
     </div>
@@ -18,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 import MonacoEditor from '@/components/MonacoEditor.vue';
 import { generate_circuit, generate_circuit_request, generate_circuit_response } from '@/apis/index.ts';
@@ -29,6 +33,8 @@ const codeEmpty = computed(() => {
 })
 const circuitStore = useCircuitStore();
 const error = ref<string>('');
+const isCompilationFail = ref(false);
+const compilationFailMessage = ref('');
 
 const generateCircuit = async () => {
   if (!circuitStore.code) {
@@ -47,6 +53,11 @@ const generateCircuit = async () => {
       circuitStore.setSymbols(response.circuitData.symbols);
 
     }).catch((err: any) => {
+      if (err.response?.status === 400) {
+        compilationFailMessage.value = 'Circom code compilation failed.';
+        isCompilationFail.value = true;
+        return; // Interrupt the function
+      }
       console.log(error);
       error.value = err.response?.data?.error || 'Error generating circuit';
     });
@@ -78,10 +89,32 @@ const fillExampleCode = () => {
 const cleanCode = () => {
   circuitStore.setCode('');
 }
+
+watch(isCompilationFail, (newVal) => {
+  if (newVal) {
+    setTimeout(() => {
+      isCompilationFail.value = false;
+    }, 5000);
+  }
+});
+
+const handleEditorValidation = (markers: any) => {
+  error.value = markers.length > 0 
+    ? markers[0].message 
+    : null;
+};
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 :deep(textarea) {
   height: 100%;
+}
+
+.el-alert {
+  margin: 20px 0 0;
+}
+
+.el-alert:first-child {
+  margin: 0;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="flex flex-col h-full">
     <div class="flex flex-row flex-nowrap mb-2">
-      <h2 class="text-base font-bold">Restriction View</h2>
+      <h2 class="text-base font-bold">Constraint View</h2>
       <el-tooltip class="box-item" effect="light" content="Restriction View" placement="top">
         <el-icon class="my-auto ml-1 hover:cursor-pointer">
           <Warning style="width: 0.9em; height: 0.9em; fill: black; fill-opacity: 0.8;" />
@@ -9,10 +9,10 @@
       </el-tooltip>
     </div>
 
-    <div class="border border-gray-300 p-4 rounded-md bg-gray-50 h-full overflow-y-auto">
+    <div class="border border-gray-300 p-2 rounded-md bg-gray-50 flex-grow">
       <ul>
         <li v-for="signal in selectedSignals" :key="signal" class="mb-2">
-          Restriction for signal: {{ signal }}
+          Constraint for signal: {{ signal }}
         </li>
       </ul>
     </div>
@@ -28,7 +28,7 @@ const selectedSignals = computed(() => circuitStore.selectedSignals);
 
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 .h-full {
   max-height: 400px;
 }
